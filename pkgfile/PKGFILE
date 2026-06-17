@@ -1,67 +1,38 @@
-# Maintainer: Vilmar Catafesta <vcatafesta@gmail.com>
+# Maintainer: Eduardo Charquero <eduardo.charquero@gmail.com>
 
-pkgname=voidbr-pkgname
-pkgdesc="Package template for VoidLinuxBR"
+pkgname=voidbr-ciscopackettracer
+pkgdesc="Cisco Packet Tracer"
 pkgver=$(date +%Y%m%d)
 pkgrel=$(date +%H%M)
+arch=('x86_64')
+license=('custom:Cisco-EULA')
+url="https://github.com/voidlinuxbr/$pkgname"
 provides=()
-replaces=()
-arch=('any')
-license=('MIT')
-#url="ssh://git@github.com/voidlinuxbr/${pkgname}"
-url="https://github.com/voidlinuxbr/${pkgname}"
-source=("git+${url}.git")
-md5sums=('SKIP')
-makedepends=()
-depends=()
-
-# Automatically detect and use the correct install file
-if [ -e "${pkgname}.install" ]; then
-	install=${pkgname}.install
-elif [ -e "pkgbuild.install" ]; then
-	install=pkgfile.install
-fi
+#depends=(alsa-lib	gtk3 libcups libxss libxtst nss ttf-liberation xdg-utils)
+options=('!emptydirs' '!strip')
+source=(https://www.voidbr.org/iso/cisco/CiscoPacketTracer_900_Ubuntu_64bit.deb)
+makedepends=(bsdtar)
 
 package() {
-	# Verify default folder
-	if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
-		InternalDir="${srcdir}/${pkgname}/${pkgname}"
-	else
-		InternalDir="${srcdir}/${pkgname}"
-	fi
+	local dirs=("usr" "etc" "opt")
+	#echo "DESTDIR=$DESTDIR"
+	#echo "pkgdir=$pkgdir"
+	#echo "srcdir=$srcdir"
+	#echo "_pkgsrc=$_pkgsrc"
 
-	cd "${srcdir}/${pkgname}"
-	# Copiar a estrutura de /etc, /usr e /opt para /
-	local dirs=("boot" "etc" "opt" "usr")
+	cd ${srcdir}/
 	for dir in "${dirs[@]}"; do
-		if [ -d "${InternalDir}/${dir}" ]; then
-			cp -a "${InternalDir}/${dir}" "${pkgdir}/"
+		if [ -d "${_pkgsrc}/${dir}" ]; then
+			cp -a "${_pkgsrc}/${dir}" "$DESTDIR/"
 		fi
 	done
 
-	# Install license file if present
-	if [ -f "LICENSE" ]; then
-		install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
-	fi
+	echo $pkgdir
+	bsdtar -xf data.tar.xz -C "$pkgdir/"
 
-	# Install documentation if present
-	if [ -f "README.md" ]; then
-		install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
-	fi
-}
+	# License
+	#install -Dm644 eula_text.html "$pkgdir"/usr/share/licenses/google-chrome/eula_text.html
+	#install -Dm644 "$pkgdir"/opt/google/chrome/WidevineCdm/LICENSE \
+	#	"$pkgdir"/usr/share/licenses/google-chrome-$_channel/WidevineCdm-LICENSE.txt
 
-pre_install() {
-	log "Iniciando instalação"
-}
-
-post_install() {
-	log "Finalizando instalação"
-}
-
-pre_upgrade() {
-	log "Iniciando upgrade"
-}
-
-post_upgrade() {
-	log "Finalizando upgrade"
 }
