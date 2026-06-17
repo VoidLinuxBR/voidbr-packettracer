@@ -1,9 +1,9 @@
 # Maintainer: Eduardo Charquero <eduardo.charquero@gmail.com>
 
-pkgname=voidbr-ciscopackettracer
-pkgdesc="Cisco Packet Tracer"
-pkgver=$(date +%Y%m%d)
-pkgrel=$(date +%H%M)
+pkgname=voidbr-packettracer
+pkgdesc="A cross-platform visual simulation tool designed by Cisco Systems that allows users to create network topologies and imitate modern computer network"
+pkgver=9.0.0
+pkgrel=1
 arch=('x86_64')
 license=('custom:Cisco-EULA')
 url="https://github.com/voidlinuxbr/$pkgname"
