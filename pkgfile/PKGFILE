@@ -10,7 +10,12 @@ url="https://github.com/voidlinuxbr/$pkgname"
 provides=()
 #depends=(alsa-lib	gtk3 libcups libxss libxtst nss ttf-liberation xdg-utils)
 options=('!emptydirs' '!strip')
-source=(https://www.voidbr.org/iso/cisco/CiscoPacketTracer_900_Ubuntu_64bit.deb)
+source=(
+  https://www.voidbr.org/iso/cisco/CiscoPacketTracer_900_Ubuntu_64bit.deb
+  CiscoPacketTracer-9.0.0.desktop
+  CiscoPacketTracerPtsa-9.0.0.desktop
+)
+
 makedepends=(bsdtar)
 
 package() {
@@ -30,9 +35,13 @@ package() {
 	echo $pkgdir
 	bsdtar -xf data.tar.xz -C "$pkgdir/"
 
+  mkdir -p $pkgdir/usr/share/applications/
+	install -Dm644 CiscoPacketTracer-9.0.0.desktop $pkgdir/usr/share/applications/
+	install -Dm644 CiscoPacketTracerPtsa-9.0.0.desktop $pkgdir/usr/share/applications/
+
 	# License
-	#install -Dm644 eula_text.html "$pkgdir"/usr/share/licenses/google-chrome/eula_text.html
 	#install -Dm644 "$pkgdir"/opt/google/chrome/WidevineCdm/LICENSE \
+	#install -Dm644 eula_text.html "$pkgdir"/usr/share/licenses/google-chrome/eula_text.html
 	#	"$pkgdir"/usr/share/licenses/google-chrome-$_channel/WidevineCdm-LICENSE.txt
 
 }
